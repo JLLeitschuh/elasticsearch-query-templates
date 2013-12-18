@@ -1,0 +1,10 @@
+
+Elasticsearch query templates
+Copyright 2013 ElasticSearch and Shay Banon
+
+Includes software from other Apache Software Foundation projects,
+including, but not limited to:
+    - Apache Lucene Java
+
+For further details on licenses of other libraries and projects used as part of this
+product please refer to the DEPENDENCIES file.
