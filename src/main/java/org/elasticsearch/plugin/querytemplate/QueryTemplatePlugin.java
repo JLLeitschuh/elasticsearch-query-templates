@@ -19,8 +19,6 @@
 package org.elasticsearch.plugin.querytemplate;
 
 import org.elasticsearch.plugins.AbstractPlugin;
-import org.elasticsearch.script.ScriptModule;
-import org.elasticsearch.script.querytemplate.QueryTemplateEngineService;
 
 /**
  * Plugin to enable referencing query templates and parameters.
@@ -41,7 +39,7 @@ public class QueryTemplatePlugin extends AbstractPlugin {
         return "Query template plugin allowing to add reference queries by template name";
     }
 
-    public void onModule(ScriptModule module) {
-        module.addScriptEngine(QueryTemplateEngineService.class);
-    }
+//    public void onModule() {
+
+//    }
 }
