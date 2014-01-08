@@ -18,13 +18,6 @@
  */
 package org.elasticsearch.index.query.template;
 
-import static org.elasticsearch.common.settings.ImmutableSettings.settingsBuilder;
-
-import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.cluster.ClusterService;
@@ -59,6 +52,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
+
 /**
  * Integration test for template based queries: Go from templated search request to search response.
  * */
@@ -81,8 +79,8 @@ public class QueryTemplateTest {
 
     @After
     public void closeNodes() {
-        client.close();
-        node.close();
+        if (client != null) client.close();
+        if (node != null) node.close();
     }
 
     @Test
