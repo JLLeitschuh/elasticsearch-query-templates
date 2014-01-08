@@ -25,19 +25,23 @@ import java.util.Map;
 
 import org.apache.lucene.search.Query;
 import org.elasticsearch.common.Nullable;
-import org.elasticsearch.common.settings.ImmutableSettings;
+import org.elasticsearch.common.inject.Inject;
 import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.common.xcontent.XContentParser;
 import org.elasticsearch.index.query.QueryParseContext;
 import org.elasticsearch.index.query.QueryParser;
 import org.elasticsearch.index.query.QueryParsingException;
-import org.elasticsearch.script.querytemplate.QueryTemplateEngineService;
+import org.elasticsearch.index.query.template.QueryTemplateEngine;
 
 public class TemplateQueryParser implements QueryParser {
 
     public static final String NAME = "template";
     public static final String STRING = "template_string";
     public static final String VARS = "template_vars";
+
+    @Inject
+    public TemplateQueryParser() {
+    }
 
     @Override
     public String[] names() {
@@ -75,7 +79,7 @@ public class TemplateQueryParser implements QueryParser {
                 }
             }
         }
-        QueryTemplateEngineService service = new QueryTemplateEngineService(ImmutableSettings.Builder.EMPTY_SETTINGS);
+        QueryTemplateEngine service = new QueryTemplateEngine();
         Object mustache = service.compile(template);
         String querySource = (String) service.execute(mustache, vars);
         

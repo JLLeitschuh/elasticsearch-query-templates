@@ -18,12 +18,11 @@
  */
 package org.elasticsearch.index.query;
 
-import static junit.framework.Assert.assertTrue;
-
 import java.io.IOException;
 
 import org.apache.lucene.search.ConstantScoreQuery;
 import org.apache.lucene.search.Query;
+import org.elasticsearch.cache.recycler.CacheRecyclerModule;
 import org.elasticsearch.cluster.ClusterService;
 import org.elasticsearch.common.inject.AbstractModule;
 import org.elasticsearch.common.inject.Injector;
@@ -40,24 +39,24 @@ import org.elasticsearch.index.analysis.AnalysisModule;
 import org.elasticsearch.index.cache.IndexCacheModule;
 import org.elasticsearch.index.codec.CodecModule;
 import org.elasticsearch.index.engine.IndexEngineModule;
-import org.elasticsearch.index.mapper.MapperServiceModule;
-import org.elasticsearch.index.query.IndexQueryParserModule;
 import org.elasticsearch.index.query.IndexQueryParserService;
 import org.elasticsearch.index.query.QueryParseContext;
 import org.elasticsearch.index.query.QueryParsingException;
 import org.elasticsearch.index.query.TemplateQueryParser;
+import org.elasticsearch.index.query.functionscore.FunctionScoreModule;
 import org.elasticsearch.index.settings.IndexSettingsModule;
 import org.elasticsearch.index.similarity.SimilarityModule;
 import org.elasticsearch.indices.query.IndicesQueriesModule;
 import org.elasticsearch.script.ScriptModule;
+import org.elasticsearch.test.ElasticsearchTestCase;
+import org.elasticsearch.threadpool.ThreadPoolModule;
 import org.junit.Test;
 
 /**
  * Test parsing and executing a template request.
  * */
-public class TemplateQueryParserTest extends TemplateQueryParser {
+public class TemplateQueryParserTest extends ElasticsearchTestCase {
 
-    @SuppressWarnings("deprecation")
     @Test
     public void testParser() throws QueryParsingException, IOException {
         String templateString = "{\"template\": {" +
@@ -65,23 +64,24 @@ public class TemplateQueryParserTest extends TemplateQueryParser {
         		"\"template_vars\":{\"template\":\"all\"}}" +
         		"}";
 
-        Settings settings = ImmutableSettings.settingsBuilder()
-                .put("index.cache.filter.type", "none")
-                .build();
+        Settings settings = ImmutableSettings.Builder.EMPTY_SETTINGS;
+
         Index index = new Index("test");
         Injector injector = new ModulesBuilder().add(
-                new CodecModule(settings),
                 new SettingsModule(settings),
+                new CacheRecyclerModule(settings),
+                new ThreadPoolModule(settings),
                 new IndicesQueriesModule(),
                 new ScriptModule(settings),
-                new MapperServiceModule(),
                 new IndexSettingsModule(index, settings),
                 new IndexCacheModule(settings),
                 new AnalysisModule(settings),
                 new IndexEngineModule(settings),
                 new SimilarityModule(settings),
-                new IndexQueryParserModule(settings),
                 new IndexNameModule(index),
+                new IndexQueryParserModule(settings),
+                new CodecModule(settings),
+                new FunctionScoreModule(),
                 new AbstractModule() {
                     @Override
                     protected void configure() {
@@ -96,7 +96,7 @@ public class TemplateQueryParserTest extends TemplateQueryParser {
         QueryParseContext context = new QueryParseContext(index, queryParserService);
         context.reset(templateSourceParser);
         
-        TemplateQueryParser parser = new TemplateQueryParser();
+        TemplateQueryParser parser = injector.getInstance(TemplateQueryParser.class);
         Query query = parser.parse(context);
         assertTrue("Parsing template query failed.", query instanceof ConstantScoreQuery);
     }
