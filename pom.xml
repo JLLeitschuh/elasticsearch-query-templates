@@ -132,6 +132,7 @@
                 <configuration>
                   <header>${house.keeping.base}/src/main/enforcer/header.txt</header>
                   <strictCheck>true</strictCheck>
+                  <excludes><exclude>LICENSE.txt</exclude></excludes>
                 </configuration>
                 <executions>
                   <execution>
