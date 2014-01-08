@@ -31,6 +31,9 @@ import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
 
+/**
+ * Figure out how Mustache works for the simplest use case. Leaving in here for now for reference.
+ * */
 public class MustacheTest {
 
     @Test

@@ -17,8 +17,29 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.elasticsearch.script.querytemplate;
+package org.elasticsearch.index.query;
 
-public class TemplateQueryParser {
-    public static final String NAME = "template";
+import java.io.IOException;
+import java.util.Map;
+
+import org.elasticsearch.common.xcontent.XContentBuilder;
+import org.elasticsearch.index.query.BaseQueryBuilder;
+
+public class TemplateQueryBuilder extends BaseQueryBuilder {
+
+    private Map<String, Object> vars;
+    private String template;
+    
+    public TemplateQueryBuilder(String template, Map<String, Object> vars) {
+        this.template = template;
+        this.vars = vars;
+    }
+
+    @Override
+    protected void doXContent(XContentBuilder builder, Params params) throws IOException {
+        builder.startObject(TemplateQueryParser.NAME);
+        builder.field(TemplateQueryParser.STRING, template);
+        builder.field(TemplateQueryParser.VARS, vars);
+        builder.endObject();
+    }
 }

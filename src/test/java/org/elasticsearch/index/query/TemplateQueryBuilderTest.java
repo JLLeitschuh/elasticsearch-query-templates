@@ -17,7 +17,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.elasticsearch.script.querytemplate;
+package org.elasticsearch.index.query;
 
 import static org.junit.Assert.*;
 
@@ -26,9 +26,14 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
+import org.elasticsearch.index.query.TemplateQueryBuilder;
 import org.junit.Test;
 
+/**
+ * Test building and serialising a template search request.
+ * */
 public class TemplateQueryBuilderTest {
 
     @Test
@@ -37,7 +42,11 @@ public class TemplateQueryBuilderTest {
         vars.put("template", "filled");
         TemplateQueryBuilder builder = new TemplateQueryBuilder("I am a $template string", vars);
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        builder.doXContent(XContentFactory.jsonBuilder(stream), null);
+        XContentBuilder content = XContentFactory.jsonBuilder(stream);
+        content.startObject();
+        builder.doXContent(content, null);
+        content.endObject();
+        content.close();
         assertTrue(stream.toString().equals("{\"template\":{\"template_string\":\"I am a $template string\",\"template_vars\":{\"template\":\"filled\"}}}"));
     }
 

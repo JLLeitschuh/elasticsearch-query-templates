@@ -30,6 +30,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * Mustache based templating test
+ * */
 public class QueryTemplateEngineServiceTest {
     private QueryTemplateEngineService qe;
     

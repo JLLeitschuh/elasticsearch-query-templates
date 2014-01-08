@@ -39,6 +39,8 @@ import com.github.mustachejava.MustacheFactory;
 /**
  * Main entry point handling template registration, compilation and
  * execution.
+ * 
+ * TODO Major refactoring needed as approach to tackling template queries completely changed underway
  * */
 public class QueryTemplateEngineService extends AbstractComponent implements ScriptEngineService {
 
