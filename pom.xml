@@ -30,7 +30,7 @@
   </parent>
 
   <properties>
-        <elasticsearch.version>0.90.1</elasticsearch.version>
+        <elasticsearch.version>0.90.9</elasticsearch.version>
         <house.keeping.base>${basedir}</house.keeping.base>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
