@@ -18,11 +18,6 @@
  */
 package org.elasticsearch.script.querytemplate;
 
-import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.cluster.ClusterService;
@@ -44,7 +39,6 @@ import org.elasticsearch.index.codec.CodecModule;
 import org.elasticsearch.index.engine.IndexEngineModule;
 import org.elasticsearch.index.mapper.MapperServiceModule;
 import org.elasticsearch.index.query.IndexQueryParserModule;
-import org.elasticsearch.index.query.IndexQueryParserService;
 import org.elasticsearch.index.query.TemplateQueryBuilder;
 import org.elasticsearch.index.query.TemplateQueryParser;
 import org.elasticsearch.index.settings.IndexSettingsModule;
@@ -56,7 +50,11 @@ import org.elasticsearch.node.NodeBuilder;
 import org.elasticsearch.script.ScriptModule;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 
 /**
  * Integration test for template based queries: Go from templated search request to search response.
@@ -80,8 +78,8 @@ public class QueryTemplateTest {
 
     @After
     public void closeNodes() {
-        client.close();
-        node.close();
+        if (client != null) client.close();
+        if (node != null) node.close();
     }
 
     //@Test TODO disabled for now - does not work yet
