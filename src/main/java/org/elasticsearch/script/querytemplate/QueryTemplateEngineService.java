@@ -18,22 +18,21 @@
  */
 package org.elasticsearch.script.querytemplate;
 
-import java.io.StringReader;
-import java.io.StringWriter;
-
-import java.util.Map;
-
+import com.github.mustachejava.DefaultMustacheFactory;
+import com.github.mustachejava.Mustache;
+import com.github.mustachejava.MustacheFactory;
 import org.elasticsearch.common.Nullable;
 import org.elasticsearch.common.component.AbstractComponent;
+import org.elasticsearch.common.inject.Inject;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.script.ExecutableScript;
 import org.elasticsearch.script.ScriptEngineService;
 import org.elasticsearch.script.SearchScript;
 import org.elasticsearch.search.lookup.SearchLookup;
 
-import com.github.mustachejava.DefaultMustacheFactory;
-import com.github.mustachejava.Mustache;
-import com.github.mustachejava.MustacheFactory;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.util.Map;
 
 /**
  * Main entry point handling template registration, compilation and
@@ -43,6 +42,7 @@ import com.github.mustachejava.MustacheFactory;
  * */
 public class QueryTemplateEngineService extends AbstractComponent implements ScriptEngineService {
 
+    @Inject
     public QueryTemplateEngineService(Settings settings) {
         super(settings);
     }
@@ -82,7 +82,7 @@ public class QueryTemplateEngineService extends AbstractComponent implements Scr
 
     @Override
     public String[] types() {
-        return new String[]{"mustache", "mustache"};
+        return new String[]{"mustache"};
     }
 
     @Override
