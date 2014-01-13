@@ -29,18 +29,10 @@
         <dependencySet>
             <outputDirectory>/</outputDirectory>
             <useProjectArtifact>true</useProjectArtifact>
-            <useTransitiveFiltering>true</useTransitiveFiltering>
+            <scope>runtime</scope>
             <excludes>
                 <exclude>org.elasticsearch:elasticsearch</exclude>
             </excludes>
-        </dependencySet>
-        <dependencySet>
-            <outputDirectory>/</outputDirectory>
-            <useProjectArtifact>true</useProjectArtifact>
-            <useTransitiveFiltering>true</useTransitiveFiltering>
-            <includes>
-                <include>com.github.spullara.mustache:compiler</include>
-            </includes>
-        </dependencySet>
-    </dependencySets>
+       </dependencySet>
+     </dependencySets>
 </assembly>
