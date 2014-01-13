@@ -23,7 +23,7 @@ import static org.junit.Assert.*;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.elasticsearch.index.query.template.QueryTemplateEngine;
+import org.elasticsearch.index.query.template.TemplateEngine;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -31,14 +31,14 @@ import org.junit.Test;
  * Mustache based templating test
  * */
 public class QueryTemplateEngineTest {
-    private QueryTemplateEngine qe;
+    private TemplateEngine qe;
     
     private static String TEMPLATE = "GET _search {\"query\": " + "{\"boosting\": {" + "\"positive\": {\"match\": {\"body\": \"gift\"}},"
             + "\"negative\": {\"term\": {\"body\": {\"value\": \"solr\"}" + "}}, \"negative_boost\": {{boost_val}} } }}";
 
     @Before
     public void setup() {
-        qe = new QueryTemplateEngine();
+        qe = new TemplateEngine();
     }
 
     @Test
