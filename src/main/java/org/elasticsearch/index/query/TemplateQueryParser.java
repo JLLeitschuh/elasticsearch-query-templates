@@ -31,7 +31,7 @@ import org.elasticsearch.common.xcontent.XContentParser;
 import org.elasticsearch.index.query.QueryParseContext;
 import org.elasticsearch.index.query.QueryParser;
 import org.elasticsearch.index.query.QueryParsingException;
-import org.elasticsearch.index.query.template.QueryTemplateEngine;
+import org.elasticsearch.index.query.template.TemplateEngine;
 
 public class TemplateQueryParser implements QueryParser {
 
@@ -79,7 +79,7 @@ public class TemplateQueryParser implements QueryParser {
                 }
             }
         }
-        QueryTemplateEngine service = new QueryTemplateEngine();
+        TemplateEngine service = new TemplateEngine();
         Object mustache = service.compile(template);
         String querySource = (String) service.execute(mustache, vars);
         

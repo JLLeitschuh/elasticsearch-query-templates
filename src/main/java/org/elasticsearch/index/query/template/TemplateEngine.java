@@ -33,7 +33,7 @@ import com.github.mustachejava.MustacheFactory;
  * 
  * TODO Major refactoring needed as approach to tackling template queries completely changed underway
  * */
-public class QueryTemplateEngine {
+public class TemplateEngine {
 
     public Object compile(String template) {
         MustacheFactory f = new DefaultMustacheFactory();
