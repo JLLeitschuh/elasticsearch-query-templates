@@ -27,12 +27,14 @@ import org.elasticsearch.index.query.TemplateQueryParser;
 import org.elasticsearch.index.settings.IndexSettings;
 import org.elasticsearch.indices.query.IndicesQueriesRegistry;
 
+/**
+ * Make sure to register the query. Index, Settings and IndicesQueriesRegistry are injected automaticalls.
+ * */
 public class RegisterTemplateQueryParser extends AbstractIndexComponent {
 
     @Inject
     public RegisterTemplateQueryParser (Index index, @IndexSettings Settings indexSettings, IndicesQueriesRegistry indicesQueriesRegistry, Injector injector) {
         super(index, indexSettings);
-
         indicesQueriesRegistry.addQueryParser(new TemplateQueryParser());
     }
 }

@@ -33,6 +33,12 @@ import org.elasticsearch.index.query.QueryParser;
 import org.elasticsearch.index.query.QueryParsingException;
 import org.elasticsearch.index.query.template.TemplateEngine;
 
+/**
+ * In the simplest case, parse template string and variables from the request, compile the template and
+ * execute the template against the given variables.
+ * 
+ * TODO support named templates
+ * */
 public class TemplateQueryParser implements QueryParser {
 
     public static final String NAME = "template";

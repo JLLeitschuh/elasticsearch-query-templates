@@ -30,6 +30,7 @@ import org.elasticsearch.plugins.AbstractPlugin;
  * This class is also referenced in the plugin configuration - make sure
  * you change the class name in src/main/resources/es.plugin.properties
  * when refactoring this class to a different name.
+ * 
  */
 public class TemplateQueryPlugin extends AbstractPlugin {
 
@@ -43,6 +44,9 @@ public class TemplateQueryPlugin extends AbstractPlugin {
         return "Query template plugin allowing to add reference queries by template name";
     }
 
+    /**
+     * Make sure the new query type is registered on index loading.
+     * */
     @Override
     public Collection<Class<? extends Module>> indexModules() {
         Collection<Class<? extends Module>> modules = Lists.newArrayList();

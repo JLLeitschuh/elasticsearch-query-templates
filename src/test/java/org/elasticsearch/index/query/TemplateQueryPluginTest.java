@@ -25,6 +25,9 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.test.ElasticsearchIntegrationTest;
 import org.junit.Test;
 
+/**
+ * Full integration test of the template query plugin.
+ * */
 @ElasticsearchIntegrationTest.ClusterScope(scope = ElasticsearchIntegrationTest.Scope.TEST)
 public class TemplateQueryPluginTest extends ElasticsearchIntegrationTest {
 

@@ -31,15 +31,33 @@ import com.github.mustachejava.MustacheFactory;
  * Main entry point handling template registration, compilation and
  * execution.
  * 
- * TODO Major refactoring needed as approach to tackling template queries completely changed underway
- * */
+ * Template handling is based on Mustache. Template handling is a two step
+ * process: First compile the string representing the template, the resulting
+ * {@link Mustache} object can then be re-used for subsequent executions.
+ */
 public class TemplateEngine {
 
+	/**
+	 * Compile a template string to (in this case) a Mustache object than can
+	 * later be re-used for execution to fill in missing parameter values.
+	 * 
+	 * @param template a string representing the template to compile.
+	 * @return a compiled template object for later execution.
+	 * */
     public Object compile(String template) {
         MustacheFactory f = new DefaultMustacheFactory();
         return f.compile(new StringReader(template), "query-template");
     }
 
+    /**
+     * Execute a compiled template object (as retrieved from the compile
+     * method) and fill potential place holders with the variables given.
+     *
+     * @param template compiled template object.
+     * @param vars map of variables to use during substitution.
+     * 
+     * @return the processed string with all given variables substitued.
+     * */
     public Object execute(Object template, Map<String, Object> vars) {
         StringWriter result = new StringWriter();
         ((Mustache) template).execute(result, vars);

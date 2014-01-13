@@ -24,6 +24,9 @@ import java.util.Map;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.index.query.BaseQueryBuilder;
 
+/**
+ * Facilitates creating template query requests.
+ * */
 public class TemplateQueryBuilder extends BaseQueryBuilder {
 
     private Map<String, Object> vars;
