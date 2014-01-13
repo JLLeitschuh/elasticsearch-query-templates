@@ -251,6 +251,27 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-eclipse-plugin</artifactId>
+                <version>2.9</version>
+                <configuration>
+                  <projectnatures>
+                    <nature>org.eclipse.jdt.core.javanature</nature>
+                    <nature>net.sf.eclipsecs.core.CheckstyleNature</nature>
+                  </projectnatures>
+                  <buildcommands>
+                    <java.lang.String>org.eclipse.jdt.core.javabuilder</java.lang.String>
+                    <java.lang.String>net.sf.eclipsecs.core.CheckstyleBuilder</java.lang.String>
+                  </buildcommands>
+                  <additionalConfig>
+                    <file>
+                      <name>.checkstyle</name>
+                      <location>${house.keeping.base}/src/main/enforcer/checkstyle_config.xml</location>
+                    </file>
+                  </additionalConfig>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-remote-resources-plugin</artifactId>
                 <version>1.4</version>
                 <executions>
