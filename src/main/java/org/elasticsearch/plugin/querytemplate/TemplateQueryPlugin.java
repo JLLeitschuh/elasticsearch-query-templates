@@ -22,7 +22,9 @@ import java.util.Collection;
 
 import org.elasticsearch.common.collect.Lists;
 import org.elasticsearch.common.inject.Module;
+import org.elasticsearch.index.query.template.TemplateEngine;
 import org.elasticsearch.plugins.AbstractPlugin;
+import org.elasticsearch.script.ScriptModule;
 
 /**
  * Plugin to enable referencing query templates and parameters.
@@ -52,5 +54,9 @@ public class TemplateQueryPlugin extends AbstractPlugin {
         Collection<Class<? extends Module>> modules = Lists.newArrayList();
         modules.add(TemplateQueryParserModule.class);
         return modules;
+    }
+    
+    public void onModule(ScriptModule module) {
+        module.addScriptEngine(TemplateEngine.class);
     }
 }

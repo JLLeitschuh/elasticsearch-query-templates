@@ -23,6 +23,7 @@ import static org.junit.Assert.*;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.elasticsearch.common.settings.ImmutableSettings;
 import org.elasticsearch.index.query.template.TemplateEngine;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,7 +39,7 @@ public class QueryTemplateEngineTest {
 
     @Before
     public void setup() {
-        qe = new TemplateEngine();
+        qe = new TemplateEngine(ImmutableSettings.Builder.EMPTY_SETTINGS);
     }
 
     @Test

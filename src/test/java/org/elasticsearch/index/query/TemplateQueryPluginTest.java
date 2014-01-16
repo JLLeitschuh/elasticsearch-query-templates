@@ -22,6 +22,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.common.network.NetworkUtils;
+import org.elasticsearch.common.settings.ImmutableSettings;
+import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.test.ElasticsearchIntegrationTest;
 import org.junit.Test;
 
@@ -31,25 +34,62 @@ import org.junit.Test;
 @ElasticsearchIntegrationTest.ClusterScope(scope = ElasticsearchIntegrationTest.Scope.TEST)
 public class TemplateQueryPluginTest extends ElasticsearchIntegrationTest {
 
-	@Test
-	public void test() {
-		createIndex("test");
-		ensureGreen();
-		
-		client().prepareIndex("test", "testtype").setId("1").setSource("text", "value1").get();
-		client().prepareIndex("test", "testtype").setId("2").setSource("text", "value2").get();
-		refresh();
-		
+    @Test
+    public void testTemplateInBody() {
+        createIndex("test");
+        ensureGreen();
+
+        client().prepareIndex("test", "testtype").setId("1")
+                .setSource("text", "value1").get();
+        client().prepareIndex("test", "testtype").setId("2")
+                .setSource("text", "value2").get();
+        refresh();
+
         Map<String, Object> vars = new HashMap<String, Object>();
         vars.put("template", "all");
 
-        TemplateQueryBuilder builder = new TemplateQueryBuilder("{\"match_{{template}}\": {}}\"", vars);
-        SearchResponse sr = client().prepareSearch()
-                .setQuery(builder)
-                .execute()
-                .actionGet();
-        		
-        assertEquals("Template query didn't return correct number of hits.", 2, sr.getHits().totalHits());
-	}
+        TemplateQueryBuilder builder = new TemplateQueryBuilder(
+                "{\"match_{{template}}\": {}}\"", vars);
+        SearchResponse sr = client().prepareSearch().setQuery(builder)
+                .execute().actionGet();
+        assertEquals("Template query didn't return correct number of hits.", 2,
+                sr.getHits().totalHits());
+    }
 
+    @Test
+    public void testTemplateInFile() {
+        createIndex("test");
+        ensureGreen();
+
+        client().prepareIndex("test", "testtype").setId("1")
+                .setSource("text", "value1").get();
+        client().prepareIndex("test", "testtype").setId("2")
+                .setSource("text", "value2").get();
+        refresh();
+
+        Map<String, Object> vars = new HashMap<String, Object>();
+        vars.put("template", "all");
+        TemplateQueryBuilder builder = new TemplateQueryBuilder(
+                "storedTemplate", vars);
+        SearchResponse sr = client().prepareSearch().setQuery(builder)
+                .execute().actionGet();
+        assertEquals("Template query didn't return correct number of hits.", 2,
+                sr.getHits().totalHits());
+
+    }
+
+    @Override
+    public Settings nodeSettings(int nodeOrdinal) {
+        String scriptPath = this.getClass()
+                .getResource("config").getPath();
+
+        Settings settings = ImmutableSettings
+                .settingsBuilder()
+                .put("index.cache.filter.type", "none")
+                .put("path.conf", scriptPath)
+                .put("cluster.name", "test-cluster-" + NetworkUtils.getLocalAddress())
+                .put("gateway.type", "none").put("number_of_shards", 1).build();
+
+        return settings;
+    }
 }

@@ -44,9 +44,11 @@ import org.elasticsearch.index.query.QueryParseContext;
 import org.elasticsearch.index.query.QueryParsingException;
 import org.elasticsearch.index.query.TemplateQueryParser;
 import org.elasticsearch.index.query.functionscore.FunctionScoreModule;
+import org.elasticsearch.index.query.template.TemplateEngine;
 import org.elasticsearch.index.settings.IndexSettingsModule;
 import org.elasticsearch.index.similarity.SimilarityModule;
 import org.elasticsearch.indices.query.IndicesQueriesModule;
+import org.elasticsearch.plugin.querytemplate.TemplateQueryPlugin;
 import org.elasticsearch.script.ScriptModule;
 import org.elasticsearch.test.ElasticsearchTestCase;
 import org.elasticsearch.threadpool.ThreadPoolModule;
@@ -67,12 +69,15 @@ public class TemplateQueryParserTest extends ElasticsearchTestCase {
         Settings settings = ImmutableSettings.Builder.EMPTY_SETTINGS;
 
         Index index = new Index("test");
+        ScriptModule scriptModule = new ScriptModule(settings);
+        scriptModule.addScriptEngine(TemplateEngine.class);
+
         Injector injector = new ModulesBuilder().add(
                 new SettingsModule(settings),
                 new CacheRecyclerModule(settings),
                 new ThreadPoolModule(settings),
                 new IndicesQueriesModule(),
-                new ScriptModule(settings),
+                scriptModule,
                 new IndexSettingsModule(index, settings),
                 new IndexCacheModule(settings),
                 new AnalysisModule(settings),
@@ -95,7 +100,7 @@ public class TemplateQueryParserTest extends ElasticsearchTestCase {
         XContentParser templateSourceParser = XContentFactory.xContent(templateString).createParser(templateString);
         QueryParseContext context = new QueryParseContext(index, queryParserService);
         context.reset(templateSourceParser);
-        
+
         TemplateQueryParser parser = injector.getInstance(TemplateQueryParser.class);
         Query query = parser.parse(context);
         assertTrue("Parsing template query failed.", query instanceof ConstantScoreQuery);

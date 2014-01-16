@@ -33,8 +33,11 @@ import org.elasticsearch.indices.query.IndicesQueriesRegistry;
 public class RegisterTemplateQueryParser extends AbstractIndexComponent {
 
     @Inject
-    public RegisterTemplateQueryParser (Index index, @IndexSettings Settings indexSettings, IndicesQueriesRegistry indicesQueriesRegistry, Injector injector) {
+    public RegisterTemplateQueryParser(Index index,
+            @IndexSettings Settings indexSettings,
+            IndicesQueriesRegistry indicesQueriesRegistry, Injector injector,
+            TemplateQueryParser parser) {
         super(index, indexSettings);
-        indicesQueriesRegistry.addQueryParser(new TemplateQueryParser());
+        indicesQueriesRegistry.addQueryParser(parser);
     }
 }

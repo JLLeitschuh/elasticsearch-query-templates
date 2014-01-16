@@ -23,6 +23,15 @@ import java.io.StringWriter;
 
 import java.util.Map;
 
+import org.elasticsearch.common.Nullable;
+import org.elasticsearch.common.component.AbstractComponent;
+import org.elasticsearch.common.inject.Inject;
+import org.elasticsearch.common.settings.Settings;
+import org.elasticsearch.script.ExecutableScript;
+import org.elasticsearch.script.ScriptEngineService;
+import org.elasticsearch.script.SearchScript;
+import org.elasticsearch.search.lookup.SearchLookup;
+
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
@@ -30,17 +39,22 @@ import com.github.mustachejava.MustacheFactory;
 /**
  * Main entry point handling template registration, compilation and
  * execution.
- * 
+ *
  * Template handling is based on Mustache. Template handling is a two step
  * process: First compile the string representing the template, the resulting
  * {@link Mustache} object can then be re-used for subsequent executions.
  */
-public class TemplateEngine {
+public class TemplateEngine extends AbstractComponent implements ScriptEngineService {
 
-	/**
+    @Inject
+	public TemplateEngine(Settings settings) {
+        super(settings);
+    }
+
+    /**
 	 * Compile a template string to (in this case) a Mustache object than can
 	 * later be re-used for execution to fill in missing parameter values.
-	 * 
+	 *
 	 * @param template a string representing the template to compile.
 	 * @return a compiled template object for later execution.
 	 * */
@@ -55,12 +69,71 @@ public class TemplateEngine {
      *
      * @param template compiled template object.
      * @param vars map of variables to use during substitution.
-     * 
+     *
      * @return the processed string with all given variables substitued.
      * */
     public Object execute(Object template, Map<String, Object> vars) {
         StringWriter result = new StringWriter();
         ((Mustache) template).execute(result, vars);
         return result.toString();
+    }
+
+    @Override
+    public String[] types() {
+        return new String[]{"mustache"};
+    }
+
+    @Override
+    public String[] extensions() {
+        return new String[]{"mustache"};
+    }
+
+    @Override
+    public ExecutableScript executable(Object mustache,
+            @Nullable Map<String, Object> vars) {
+        return new MustacheExecutableScript((Mustache) mustache, vars);
+    }
+
+    @Override
+    public SearchScript search(Object compiledScript, SearchLookup lookup,
+            @Nullable Map<String, Object> vars) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Object unwrap(Object value) {
+        return value;
+    }
+
+    @Override
+    public void close() {
+        // Nothing to do here
+    }
+
+    private class MustacheExecutableScript implements ExecutableScript {
+        private Mustache mustache;
+        private Map<String, Object> vars;
+
+        public MustacheExecutableScript(Mustache mustache, Map<String, Object> vars) {
+            this.mustache = mustache;
+            this.vars = vars;
+        }
+
+        @Override
+        public void setNextVar(String name, Object value) {
+            this.vars.put(name, value);
+        }
+
+        @Override
+        public Object run() {
+            StringWriter result = new StringWriter();
+            ((Mustache) mustache).execute(result, vars);
+            return result.toString();
+        }
+
+        @Override
+        public Object unwrap(Object value) {
+            return value;
+        }
     }
 }

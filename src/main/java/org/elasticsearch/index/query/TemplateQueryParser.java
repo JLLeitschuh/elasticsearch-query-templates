@@ -32,6 +32,8 @@ import org.elasticsearch.index.query.QueryParseContext;
 import org.elasticsearch.index.query.QueryParser;
 import org.elasticsearch.index.query.QueryParsingException;
 import org.elasticsearch.index.query.template.TemplateEngine;
+import org.elasticsearch.script.ExecutableScript;
+import org.elasticsearch.script.ScriptService;
 
 /**
  * In the simplest case, parse template string and variables from the request, compile the template and
@@ -44,9 +46,11 @@ public class TemplateQueryParser implements QueryParser {
     public static final String NAME = "template";
     public static final String STRING = "template_string";
     public static final String VARS = "template_vars";
+    private final ScriptService scriptService; 
 
     @Inject
-    public TemplateQueryParser() {
+    public TemplateQueryParser(ScriptService scriptService) {
+        this.scriptService = scriptService;
     }
 
     @Override
@@ -63,7 +67,7 @@ public class TemplateQueryParser implements QueryParser {
 
         String template = "";
         Map<String, Object> vars = new HashMap<String, Object>();
-        
+
         String currentFieldName = null;
         XContentParser.Token token;
         while ((token = parser.nextToken()) != XContentParser.Token.END_OBJECT) {
@@ -85,10 +89,10 @@ public class TemplateQueryParser implements QueryParser {
                 }
             }
         }
-        TemplateEngine service = new TemplateEngine();
-        Object mustache = service.compile(template);
-        String querySource = (String) service.execute(mustache, vars);
-        
+
+        ExecutableScript executable = this.scriptService.executable("mustache", template, vars);
+        String querySource = (String) executable.run();
+
         XContentParser qSourceParser = XContentFactory.xContent(querySource).createParser(querySource);
         try {
             final QueryParseContext context = new QueryParseContext(parseContext.index(), parseContext.indexQueryParser);
