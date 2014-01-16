@@ -27,7 +27,6 @@ import java.util.Map;
 
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
-import org.elasticsearch.index.query.TemplateQueryBuilder;
 import org.junit.Test;
 
 /**

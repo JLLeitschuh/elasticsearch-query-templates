@@ -28,41 +28,45 @@ import org.elasticsearch.common.Nullable;
 import org.elasticsearch.common.inject.Inject;
 import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.common.xcontent.XContentParser;
-import org.elasticsearch.index.query.QueryParseContext;
-import org.elasticsearch.index.query.QueryParser;
-import org.elasticsearch.index.query.QueryParsingException;
-import org.elasticsearch.index.query.template.TemplateEngine;
 import org.elasticsearch.script.ExecutableScript;
 import org.elasticsearch.script.ScriptService;
 
 /**
  * In the simplest case, parse template string and variables from the request, compile the template and
  * execute the template against the given variables.
- * 
+ *
  * TODO support named templates
  * */
 public class TemplateQueryParser implements QueryParser {
 
+    /** Name to reference this type of query. */
     public static final String NAME = "template";
+    /** Name of query parameter containing the template string. */
     public static final String STRING = "template_string";
+    /** Name of query parameter containing the template parameters. */
     public static final String VARS = "template_vars";
-    private final ScriptService scriptService; 
+    /** This is what we are registered with for query executions. */
+    private final ScriptService scriptService;
 
+    /**
+     * @param scriptService will automatically be wired by Guice
+     * */
     @Inject
     public TemplateQueryParser(ScriptService scriptService) {
         this.scriptService = scriptService;
     }
 
+    /**
+     * @return a list of names this query is registered under.
+     * */
     @Override
     public String[] names() {
-        return new String[]{
-                NAME
-        };
+        return new String[] {NAME};
     }
 
     @Override
     @Nullable
-    public Query parse(QueryParseContext parseContext) throws IOException, QueryParsingException {
+    public Query parse(QueryParseContext parseContext) throws IOException {
         XContentParser parser = parseContext.parser();
 
         String template = "";

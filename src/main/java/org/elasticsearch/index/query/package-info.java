@@ -16,18 +16,8 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.elasticsearch.plugin.querytemplate;
-
-import org.elasticsearch.common.inject.AbstractModule;
-
 /**
- * Needed at plugin startup time for registration/initialisation.
- * */
-public class TemplateQueryParserModule extends AbstractModule {
-
-    @Override
-    protected void configure() {
-        bind(RegisterTemplateQueryParser.class).asEagerSingleton();
-    }
-
-}
+ * Provides classes needed for sending template query requests to elasticsearch and
+ * handling those requests internally.
+ */
+package org.elasticsearch.index.query;

@@ -20,15 +20,9 @@
 -->
 <fileset-config file-format-version="1.2.0" simple-config="true" sync-formatter="false">
     <local-check-config name="Elasticsearch Checks" location="src/main/enforcer/checkstyle.xml" type="project" description="">
-        <additional-data name="protect-config-file" value="false"/>
+        <additional-data name="protect-config-file" value="true"/>
     </local-check-config>
     <fileset name="all" enabled="true" check-config-name="Elasticsearch Checks" local="true">
         <file-match-pattern match-pattern="^src[/\\]." include-pattern="true"/>
-        <filter name="FilesFromPackage" enabled="true">
-            <filter-data value="target" />
-            <filter-data value="src/main/resources"/>
-            <filter-data value="src/test/java"/>
-            <filter-data value="src/test/resources"/>
-        </filter>
     </fileset>
 </fileset-config>

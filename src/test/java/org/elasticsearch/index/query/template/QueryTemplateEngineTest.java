@@ -24,7 +24,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.elasticsearch.common.settings.ImmutableSettings;
-import org.elasticsearch.index.query.template.TemplateEngine;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -33,7 +32,7 @@ import org.junit.Test;
  * */
 public class QueryTemplateEngineTest {
     private TemplateEngine qe;
-    
+
     private static String TEMPLATE = "GET _search {\"query\": " + "{\"boosting\": {" + "\"positive\": {\"match\": {\"body\": \"gift\"}},"
             + "\"negative\": {\"term\": {\"body\": {\"value\": \"solr\"}" + "}}, \"negative_boost\": {{boost_val}} } }}";
 

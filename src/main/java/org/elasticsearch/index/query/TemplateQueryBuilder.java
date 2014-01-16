@@ -22,16 +22,21 @@ import java.io.IOException;
 import java.util.Map;
 
 import org.elasticsearch.common.xcontent.XContentBuilder;
-import org.elasticsearch.index.query.BaseQueryBuilder;
 
 /**
  * Facilitates creating template query requests.
  * */
 public class TemplateQueryBuilder extends BaseQueryBuilder {
 
+    /** Parameters to fill the template with. */
     private Map<String, Object> vars;
+    /** Template to fill.*/
     private String template;
-    
+
+    /**
+     * @param template the template to use for that query.
+     * @param vars the parameters to fill the template with.
+     * */
     public TemplateQueryBuilder(String template, Map<String, Object> vars) {
         this.template = template;
         this.vars = vars;

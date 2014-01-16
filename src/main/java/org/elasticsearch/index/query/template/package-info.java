@@ -16,18 +16,12 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.elasticsearch.plugin.querytemplate;
-
-import org.elasticsearch.common.inject.AbstractModule;
-
 /**
- * Needed at plugin startup time for registration/initialisation.
- * */
-public class TemplateQueryParserModule extends AbstractModule {
-
-    @Override
-    protected void configure() {
-        bind(RegisterTemplateQueryParser.class).asEagerSingleton();
-    }
-
-}
+ * Provides classes needed for compiling strings into template objects and
+ * filling those with appropriate parameter values.
+ *
+ * @see org.elasticsearch.index.query.template.TemplateEngine for example to
+ * understand how Mustache based templates can be turned into templated queries
+ * for Elasticsearch
+ */
+package org.elasticsearch.index.query.template;

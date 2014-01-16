@@ -28,11 +28,11 @@ import org.elasticsearch.script.ScriptModule;
 
 /**
  * Plugin to enable referencing query templates and parameters.
- * 
+ *
  * This class is also referenced in the plugin configuration - make sure
  * you change the class name in src/main/resources/es.plugin.properties
  * when refactoring this class to a different name.
- * 
+ *
  */
 public class TemplateQueryPlugin extends AbstractPlugin {
 
@@ -48,6 +48,7 @@ public class TemplateQueryPlugin extends AbstractPlugin {
 
     /**
      * Make sure the new query type is registered on index loading.
+     * @return list of modules this plugins brings.
      * */
     @Override
     public Collection<Class<? extends Module>> indexModules() {
@@ -55,7 +56,11 @@ public class TemplateQueryPlugin extends AbstractPlugin {
         modules.add(TemplateQueryParserModule.class);
         return modules;
     }
-    
+
+    /**
+     * Called at startup time for initialisation.
+     * @param module register this script engine service with the script module.
+     * */
     public void onModule(ScriptModule module) {
         module.addScriptEngine(TemplateEngine.class);
     }

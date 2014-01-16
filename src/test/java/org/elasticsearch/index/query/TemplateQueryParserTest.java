@@ -39,16 +39,11 @@ import org.elasticsearch.index.analysis.AnalysisModule;
 import org.elasticsearch.index.cache.IndexCacheModule;
 import org.elasticsearch.index.codec.CodecModule;
 import org.elasticsearch.index.engine.IndexEngineModule;
-import org.elasticsearch.index.query.IndexQueryParserService;
-import org.elasticsearch.index.query.QueryParseContext;
-import org.elasticsearch.index.query.QueryParsingException;
-import org.elasticsearch.index.query.TemplateQueryParser;
 import org.elasticsearch.index.query.functionscore.FunctionScoreModule;
 import org.elasticsearch.index.query.template.TemplateEngine;
 import org.elasticsearch.index.settings.IndexSettingsModule;
 import org.elasticsearch.index.similarity.SimilarityModule;
 import org.elasticsearch.indices.query.IndicesQueriesModule;
-import org.elasticsearch.plugin.querytemplate.TemplateQueryPlugin;
 import org.elasticsearch.script.ScriptModule;
 import org.elasticsearch.test.ElasticsearchTestCase;
 import org.elasticsearch.threadpool.ThreadPoolModule;
@@ -60,11 +55,10 @@ import org.junit.Test;
 public class TemplateQueryParserTest extends ElasticsearchTestCase {
 
     @Test
-    public void testParser() throws QueryParsingException, IOException {
-        String templateString = "{\"template\": {" +
-        		"\"template_string\":\"{\\\"match_{{template}}\\\": {}}\"," +
-        		"\"template_vars\":{\"template\":\"all\"}}" +
-        		"}";
+    public void testParser() throws IOException {
+        String templateString = "{\"template\": {"
+                + "\"template_string\":\"{\\\"match_{{template}}\\\": {}}\","
+                + "\"template_vars\":{\"template\":\"all\"}}" + "}";
 
         Settings settings = ImmutableSettings.Builder.EMPTY_SETTINGS;
 

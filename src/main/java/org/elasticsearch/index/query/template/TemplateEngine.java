@@ -46,29 +46,35 @@ import com.github.mustachejava.MustacheFactory;
  */
 public class TemplateEngine extends AbstractComponent implements ScriptEngineService {
 
+    /**
+     * @param settings automatically wired by Guice.
+     * */
     @Inject
-	public TemplateEngine(Settings settings) {
+    public TemplateEngine(Settings settings) {
         super(settings);
     }
 
     /**
-	 * Compile a template string to (in this case) a Mustache object than can
-	 * later be re-used for execution to fill in missing parameter values.
-	 *
-	 * @param template a string representing the template to compile.
-	 * @return a compiled template object for later execution.
-	 * */
+     * Compile a template string to (in this case) a Mustache object than can
+     * later be re-used for execution to fill in missing parameter values.
+     *
+     * @param template
+     *            a string representing the template to compile.
+     * @return a compiled template object for later execution.
+     * */
     public Object compile(String template) {
         MustacheFactory f = new DefaultMustacheFactory();
         return f.compile(new StringReader(template), "query-template");
     }
 
     /**
-     * Execute a compiled template object (as retrieved from the compile
-     * method) and fill potential place holders with the variables given.
+     * Execute a compiled template object (as retrieved from the compile method)
+     * and fill potential place holders with the variables given.
      *
-     * @param template compiled template object.
-     * @param vars map of variables to use during substitution.
+     * @param template
+     *            compiled template object.
+     * @param vars
+     *            map of variables to use during substitution.
      *
      * @return the processed string with all given variables substitued.
      * */
@@ -80,12 +86,12 @@ public class TemplateEngine extends AbstractComponent implements ScriptEngineSer
 
     @Override
     public String[] types() {
-        return new String[]{"mustache"};
+        return new String[] {"mustache"};
     }
 
     @Override
     public String[] extensions() {
-        return new String[]{"mustache"};
+        return new String[] {"mustache"};
     }
 
     @Override
@@ -110,11 +116,21 @@ public class TemplateEngine extends AbstractComponent implements ScriptEngineSer
         // Nothing to do here
     }
 
+    /**
+     * Used at query execution time by script service in order to execute a query template.
+     * */
     private class MustacheExecutableScript implements ExecutableScript {
+        /** Compiled template object. */
         private Mustache mustache;
+        /** Parameters to fill above object with. */
         private Map<String, Object> vars;
 
-        public MustacheExecutableScript(Mustache mustache, Map<String, Object> vars) {
+        /**
+         * @param mustache the compiled template object
+         * @param vars the parameters to fill above object with
+         **/
+        public MustacheExecutableScript(Mustache mustache,
+                Map<String, Object> vars) {
             this.mustache = mustache;
             this.vars = vars;
         }

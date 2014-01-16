@@ -19,7 +19,6 @@
 package org.elasticsearch.plugin.querytemplate;
 
 import org.elasticsearch.common.inject.Inject;
-import org.elasticsearch.common.inject.Injector;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.index.AbstractIndexComponent;
 import org.elasticsearch.index.Index;
@@ -32,10 +31,16 @@ import org.elasticsearch.indices.query.IndicesQueriesRegistry;
  * */
 public class RegisterTemplateQueryParser extends AbstractIndexComponent {
 
+    /**
+     * @param index wired by Guice
+     * @param indexSettings wired by Guice
+     * @param indicesQueriesRegistry wired by Guice, needed to register the query parser
+     * @param parser wired by Guice, this is the query parser to register
+     * */
     @Inject
     public RegisterTemplateQueryParser(Index index,
             @IndexSettings Settings indexSettings,
-            IndicesQueriesRegistry indicesQueriesRegistry, Injector injector,
+            IndicesQueriesRegistry indicesQueriesRegistry,
             TemplateQueryParser parser) {
         super(index, indexSettings);
         indicesQueriesRegistry.addQueryParser(parser);
