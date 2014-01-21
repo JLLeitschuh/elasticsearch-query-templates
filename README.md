@@ -35,14 +35,23 @@ GET _search
 }
 ```
 
-You register a template by name like so:
+You register a template by storing it in the conf/scripts directory of
+elasticsearch. In order to execute the stored template execute a request like
+so:
 
-TBD
-
-
-You execute a registered template with custom parameters like so:
-
-TBD
+```json
+GET _search
+{
+    "query": {
+        "template": {
+            "template_string": "storedTemplate",
+            "template_vars" : {
+                "template" : "all"
+            }
+        }
+    }
+}
+```
 
 
 Template language
