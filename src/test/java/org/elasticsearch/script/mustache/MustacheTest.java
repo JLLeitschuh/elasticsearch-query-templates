@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.elasticsearch.index.query.template;
+package org.elasticsearch.script.mustache;
 
 import static org.junit.Assert.*;
 

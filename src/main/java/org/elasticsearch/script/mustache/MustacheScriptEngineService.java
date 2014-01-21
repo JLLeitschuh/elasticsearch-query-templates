@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.elasticsearch.index.query.template;
+package org.elasticsearch.script.mustache;
 
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -32,6 +32,8 @@ import org.elasticsearch.script.ScriptEngineService;
 import org.elasticsearch.script.SearchScript;
 import org.elasticsearch.search.lookup.SearchLookup;
 
+import com.fasterxml.jackson.core.io.SegmentedStringWriter;
+import com.fasterxml.jackson.core.util.BufferRecycler;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
@@ -44,13 +46,16 @@ import com.github.mustachejava.MustacheFactory;
  * process: First compile the string representing the template, the resulting
  * {@link Mustache} object can then be re-used for subsequent executions.
  */
-public class TemplateEngine extends AbstractComponent implements ScriptEngineService {
+public class MustacheScriptEngineService extends AbstractComponent implements ScriptEngineService {
+
+    /** Factory to generate Mustache objects from. */
+    private static final MustacheFactory MFACTORY = new DefaultMustacheFactory();
 
     /**
      * @param settings automatically wired by Guice.
      * */
     @Inject
-    public TemplateEngine(Settings settings) {
+    public MustacheScriptEngineService(Settings settings) {
         super(settings);
     }
 
@@ -63,8 +68,7 @@ public class TemplateEngine extends AbstractComponent implements ScriptEngineSer
      * @return a compiled template object for later execution.
      * */
     public Object compile(String template) {
-        MustacheFactory f = new DefaultMustacheFactory();
-        return f.compile(new StringReader(template), "query-template");
+        return MFACTORY.compile(new StringReader(template), "query-template");
     }
 
     /**
@@ -79,9 +83,9 @@ public class TemplateEngine extends AbstractComponent implements ScriptEngineSer
      * @return the processed string with all given variables substitued.
      * */
     public Object execute(Object template, Map<String, Object> vars) {
-        StringWriter result = new StringWriter();
+        SegmentedStringWriter result = new SegmentedStringWriter(new BufferRecycler());
         ((Mustache) template).execute(result, vars);
-        return result.toString();
+        return result.getAndClear();
     }
 
     @Override

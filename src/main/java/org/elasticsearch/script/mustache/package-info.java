@@ -20,8 +20,8 @@
  * Provides classes needed for compiling strings into template objects and
  * filling those with appropriate parameter values.
  *
- * @see org.elasticsearch.index.query.template.TemplateEngine for example to
+ * @see org.elasticsearch.script.mustache.MustacheScriptEngineService for example to
  * understand how Mustache based templates can be turned into templated queries
  * for Elasticsearch
  */
-package org.elasticsearch.index.query.template;
+package org.elasticsearch.script.mustache;

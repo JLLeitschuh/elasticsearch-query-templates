@@ -40,11 +40,11 @@ import org.elasticsearch.index.cache.IndexCacheModule;
 import org.elasticsearch.index.codec.CodecModule;
 import org.elasticsearch.index.engine.IndexEngineModule;
 import org.elasticsearch.index.query.functionscore.FunctionScoreModule;
-import org.elasticsearch.index.query.template.TemplateEngine;
 import org.elasticsearch.index.settings.IndexSettingsModule;
 import org.elasticsearch.index.similarity.SimilarityModule;
 import org.elasticsearch.indices.query.IndicesQueriesModule;
 import org.elasticsearch.script.ScriptModule;
+import org.elasticsearch.script.mustache.MustacheScriptEngineService;
 import org.elasticsearch.test.ElasticsearchTestCase;
 import org.elasticsearch.threadpool.ThreadPoolModule;
 import org.junit.Test;
@@ -64,7 +64,7 @@ public class TemplateQueryParserTest extends ElasticsearchTestCase {
 
         Index index = new Index("test");
         ScriptModule scriptModule = new ScriptModule(settings);
-        scriptModule.addScriptEngine(TemplateEngine.class);
+        scriptModule.addScriptEngine(MustacheScriptEngineService.class);
 
         Injector injector = new ModulesBuilder().add(
                 new SettingsModule(settings),

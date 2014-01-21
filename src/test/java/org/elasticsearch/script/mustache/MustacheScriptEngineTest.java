@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.elasticsearch.index.query.template;
+package org.elasticsearch.script.mustache;
 
 import static org.junit.Assert.*;
 
@@ -30,15 +30,15 @@ import org.junit.Test;
 /**
  * Mustache based templating test
  * */
-public class QueryTemplateEngineTest {
-    private TemplateEngine qe;
+public class MustacheScriptEngineTest {
+    private MustacheScriptEngineService qe;
 
     private static String TEMPLATE = "GET _search {\"query\": " + "{\"boosting\": {" + "\"positive\": {\"match\": {\"body\": \"gift\"}},"
             + "\"negative\": {\"term\": {\"body\": {\"value\": \"solr\"}" + "}}, \"negative_boost\": {{boost_val}} } }}";
 
     @Before
     public void setup() {
-        qe = new TemplateEngine(ImmutableSettings.Builder.EMPTY_SETTINGS);
+        qe = new MustacheScriptEngineService(ImmutableSettings.Builder.EMPTY_SETTINGS);
     }
 
     @Test
